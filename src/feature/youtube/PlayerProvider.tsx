@@ -31,6 +31,10 @@ const PlayerProvider = props => {
   const [video, setVideo] = useState();
   const animation = useSharedValue(0);
 
+  const {children} = props;
+
+  const translateY = interpolate(animation.value, [0, 1], [height, 0]);
+
   useEffect(() => {
     toggleVideo();
   }, [video]);
@@ -42,28 +46,22 @@ const PlayerProvider = props => {
     });
   };
 
-  return () => {
-    const {children} = props;
-
-    const translateY = interpolate(animation.value, [0, 1], [height, 0]);
-
-    return (
-      <PlayerContext.Provider value={{video, setVideo}}>
-        <StatusBar barStyle="dark-content" />
-        <View style={styles.container}>
-          <View style={StyleSheet.absoluteFill}>{children}</View>
-          {isOS && (
-            <Animated.View style={{transform: [{translateY}]}}>
-              {video && <VideoModal {...{video}} />}
-            </Animated.View>
-          )}
-        </View>
-      </PlayerContext.Provider>
-    );
-  };
+  return (
+    <PlayerContext.Provider value={{video, setVideo}}>
+      <StatusBar barStyle="dark-content" />
+      <View style={styles.container}>
+        <View style={StyleSheet.absoluteFill}>{children}</View>
+        {isOS && (
+          <Animated.View style={{transform: [{translateY}]}}>
+            {video && <VideoModal {...{video}} />}
+          </Animated.View>
+        )}
+      </View>
+    </PlayerContext.Provider>
+  );
 };
 
-export default React.memo(PlayerProvider);
+export default PlayerProvider;
 
 const styles = StyleSheet.create({
   container: {

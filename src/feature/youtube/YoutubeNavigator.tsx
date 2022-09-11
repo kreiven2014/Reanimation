@@ -10,24 +10,24 @@ const Stack = createNativeStackNavigator();
 
 const YoutubeNavigator = () => {
   return (
-    // <PlayerProvider>
-    <Stack.Navigator>
-      <Stack.Screen
-        name="YoutubeHome"
-        component={Home}
-        options={{
-          title: 'Youtube Home Page',
-        }}
-      />
-      {/* <Stack.Screen
+    <PlayerProvider>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="YoutubeHome"
+          component={Home}
+          options={{
+            title: 'Youtube Home Page',
+          }}
+        />
+        {/* <Stack.Screen
         name="Worklets"
         component={Worklets}
         options={{
           title: 'Worklets',
         }}
       /> */}
-    </Stack.Navigator>
-    // </PlayerProvider>
+      </Stack.Navigator>
+    </PlayerProvider>
   );
 };
 
