@@ -17,7 +17,6 @@ type VideoThumbnailProps = {
 const VideoThumbnail = (props: VideoThumbnailProps) => {
   const {video} = props;
   const player = useContext(PlayerContext);
-  console.log('player', player);
   return (
     <TouchableWithoutFeedback onPress={() => player.setVideo(video)}>
       <View>

@@ -5,7 +5,6 @@ import {useSharedValue, withTiming} from 'react-native-reanimated';
 import {Easing} from 'reanimated-easing';
 import Svg from 'react-native-svg';
 
-console.log('Easing', Easing);
 import Background from '../components/Background';
 
 import AnimatedStroke from './AnimatedStroke';

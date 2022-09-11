@@ -38,6 +38,7 @@ const PlayerProvider = props => {
   useEffect(() => {
     toggleVideo();
   }, [video]);
+  console.log('video', video);
 
   const toggleVideo = () => {
     animation.value = withTiming(video ? 1 : 0, {
@@ -51,11 +52,9 @@ const PlayerProvider = props => {
       <StatusBar barStyle="dark-content" />
       <View style={styles.container}>
         <View style={StyleSheet.absoluteFill}>{children}</View>
-        {isOS && (
-          <Animated.View style={{transform: [{translateY}]}}>
-            {video && <VideoModal {...{video}} />}
-          </Animated.View>
-        )}
+        <Animated.View style={{transform: [{translateY}]}}>
+          {video && <VideoModal {...{video}} />}
+        </Animated.View>
       </View>
     </PlayerContext.Provider>
   );
