@@ -26,32 +26,14 @@ import {type Video as VideoModel} from '../videos';
 import VideoContent from './VideoContent';
 import PlayerControls, {PLACEHOLDER_WIDTH} from './PlayerControls';
 
-// const { Animated, Easing } = DangerZone;
 const {width, height} = Dimensions.get('window');
-const statusBarHeight = StatusBar.currentHeight;
+// const statusBarHeight = StatusBar.currentHeight;
+const statusBarHeight = 64;
+console.log('statusBarHeight', statusBarHeight);
 const minHeight = 64;
 const midBound = height - 64 * 3;
 const upperBound = midBound + minHeight;
-// const {
-//   Extrapolate,
-//   Value,
-//   Clock,
-//   cond,
-//   eq,
-//   set,
-//   add,
-//   sub,
-//   multiply,
-//   lessThan,
-//   clockRunning,
-//   startClock,
-//   spring,
-//   stopClock,
-//   event,
-//   interpolate,
-//   timing,
-//   neq,
-// } = Animated;
+
 const AnimatedVideo = Animated.createAnimatedComponent(View);
 const shadow = {
   alignItems: 'center',
@@ -125,12 +107,15 @@ const VideoModal = (props: VideoModalProps) => {
   const x = useSharedValue(0);
   const onGestureEvent = useAnimatedGestureHandler({
     onStart: (_, ctx) => {
+      console.log('onGestureEvent');
       ctx.startX = x.value;
     },
     onActive: (event, ctx) => {
+      console.log('onActive');
       x.value = ctx.startX + event.translationX;
     },
     onEnd: _ => {
+      console.log('onEnd');
       x.value = withSpring(0);
     },
   });
@@ -225,14 +210,13 @@ const VideoModal = (props: VideoModalProps) => {
       <Animated.View
         style={{
           height: StatusBar.currentHeight,
-          backgroundColor: 'black',
           opacity: statusBarOpacity,
+          backgroundColor: 'black',
         }}
       />
       <PanGestureHandler
         onHandlerStateChange={onGestureEvent}
-        activeOffsetY={[-10, 10]}
-        {...{onGestureEvent}}>
+        activeOffsetY={[-10, 10]}>
         <Animated.View
           style={{
             transform: [{translateY: tY}],

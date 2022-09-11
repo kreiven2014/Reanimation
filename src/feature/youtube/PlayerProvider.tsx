@@ -8,6 +8,7 @@ import VideoModal from './components/VideoModal';
 import Animated, {
   Easing,
   interpolate,
+  useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
@@ -33,16 +34,18 @@ const PlayerProvider = props => {
 
   const {children} = props;
 
-  const translateY = interpolate(animation.value, [0, 1], [height, 0]);
+  const transaformStyle = useAnimatedStyle(() => {
+    const translateY = interpolate(animation.value, [0, 1], [height, 0]);
+    return {transform: [{translateY}]};
+  });
 
   useEffect(() => {
     toggleVideo();
   }, [video]);
-  console.log('video', video);
 
   const toggleVideo = () => {
     animation.value = withTiming(video ? 1 : 0, {
-      duration: 300,
+      duration: 500,
       easing: Easing.inOut(Easing.ease),
     });
   };
@@ -52,7 +55,7 @@ const PlayerProvider = props => {
       <StatusBar barStyle="dark-content" />
       <View style={styles.container}>
         <View style={StyleSheet.absoluteFill}>{children}</View>
-        <Animated.View style={{transform: [{translateY}]}}>
+        <Animated.View style={transaformStyle}>
           {video && <VideoModal {...{video}} />}
         </Animated.View>
       </View>
