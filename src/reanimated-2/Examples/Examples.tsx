@@ -96,7 +96,6 @@ const Examples = () => {
   const {navigate} = useNavigation<StackNavigationProp<Routes, 'Examples'>>();
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text>MIKLE</Text>
       {examples.map(thumbnail => (
         <RectButton
           key={thumbnail.screen}
