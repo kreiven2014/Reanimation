@@ -5,7 +5,7 @@ import Animated, {
   Extrapolate,
   interpolate,
   add,
-  event,
+  useEvent,
   useSharedValue,
   withTiming,
   Clock,
@@ -18,6 +18,7 @@ import Animated, {
   withSpring,
   neq,
   useAnimatedGestureHandler,
+  useAnimatedStyle,
 } from 'react-native-reanimated';
 import {PanGestureHandler, State} from 'react-native-gesture-handler';
 
@@ -83,42 +84,122 @@ type VideoModalProps = {
 const VideoModal = (props: VideoModalProps) => {
   // animation values
   const translationY = useSharedValue(0);
-  const velocityY = useSharedValue(0);
-  const offsetY = useSharedValue(0);
+  const translateY = useSharedValue(0);
+  // const velocityY = useSharedValue(0);
+  // const offsetY = useSharedValue(0);
   const offsetY2 = useSharedValue(0);
 
-  const gestureState = useSharedValue(State.UNDETERMINED);
+  // const translateY = useSharedValue(0);
 
-  // onGestureEvent: $Call<event>;
+  // const gestureState = useSharedValue(State.UNDETERMINED);
 
-  // const onGestureEvent = event(
-  //   [
-  //     {
-  //       nativeEvent: {
-  //         translationY,
-  //         velocityY,
-  //         gestureState,
-  //       },
-  //     },
-  //   ],
-  //   {useNativeDriver: true},
-  // );
-
-  const x = useSharedValue(0);
-  const onGestureEvent = useAnimatedGestureHandler({
+  // const x = useSharedValue(0);
+  const gestureHandler = useAnimatedGestureHandler({
     onStart: (_, ctx) => {
       console.log('onGestureEvent');
-      ctx.startX = x.value;
+      ctx.translationY = translationY.value;
     },
     onActive: (event, ctx) => {
       console.log('onActive');
-      x.value = ctx.startX + event.translationX;
+      translationY.value = event.translationY;
     },
     onEnd: _ => {
       console.log('onEnd');
-      x.value = withSpring(0);
+      translationY.value = withSpring(0);
     },
   });
+
+  const uas = useAnimatedStyle(() => {
+    const translateY = interpolate(
+      translationY?.value || 0,
+      [0, midBound],
+      [0, midBound],
+      {
+        extrapolateLeft: Extrapolate.CLAMP,
+      },
+    );
+    return {
+      transform: [{translateY}],
+    };
+  });
+
+  const videoWidthAnimatedStyle = useAnimatedStyle(() => {
+    // const videoWidth = interpolate(
+    //   translationY.value,
+    //   [0, midBound, upperBound],
+    //   [width, width - 16, PLACEHOLDER_WIDTH],
+    //   {extrapolateRight: Extrapolate.CLAMP},
+    // );
+    return {
+      // width: translationY.value,
+      width: width,
+    };
+  });
+
+  // const playerControlOpaciyStyle = useAnimatedStyle(() => {
+  //   // const playerControlOpaciy = interpolate(
+  //   //   translationY.value,
+  //   //   [midBound, upperBound],
+  //   //   [0, 1],
+  //   //   {extrapolateLeft: Extrapolate.CLAMP},
+  //   // );
+  //   return {
+  //     // opacity: playerControlOpaciy,
+  //     opacity: translationY.value,
+  //   };
+  // });
+
+  // const statusBarOpacityStyle = useAnimatedStyle(() => {
+  //   // const statusBarOpacity = interpolate(
+  //   //   translationY.value,
+  //   //   [0, statusBarHeight],
+  //   //   [1, 0],
+  //   //   {extrapolateLeft: Extrapolate.CLAMP},
+  //   // );
+  //   return {
+  //     opacity: translationY.value,
+  //   };
+  // });
+
+  // const opacityStyle = useAnimatedStyle(() => {
+  //   // const opacity = interpolate(
+  //   //   translationY.value,
+  //   //   [0, midBound - 100],
+  //   //   [1, 0],
+  //   //   {
+  //   //     extrapolateLeft: Extrapolate.CLAMP,
+  //   //   },
+  //   // );
+  //   return {
+  //     opacity: translationY.value,
+  //   };
+  // });
+
+  const videoHeightStyle = useAnimatedStyle(() => {
+    const videoHeight = interpolate(
+      translationY.value,
+      [0, midBound, upperBound],
+      [width / 1.78, minHeight * 1.3, minHeight],
+      {extrapolateLeft: Extrapolate.CLAMP},
+    );
+    return {
+      height: width / 1.78,
+    };
+  });
+
+  const containerHeightStyle = useAnimatedStyle(() => {
+    // const containerHeight = interpolate(
+    //   translateY.value,
+    //   [0, midBound],
+    //   [height, 0],
+    //   {extrapolateLeft: Extrapolate.CLAMP},
+    // );
+    return {
+      height: height,
+    };
+  });
+
+  // console.log('containerHeightStyle', containerHeightStyle);
 
   const slideUp = () => {
     offsetY2.value = withTiming(-upperBound, {
@@ -157,98 +238,61 @@ const VideoModal = (props: VideoModalProps) => {
   //   ],
   // );
 
-  const translateY = useSharedValue(0);
-
   // const {onGestureEvent, translateY: y, offsetY2} = this;
   // const translateY = add(y.value, offsetY2.value);
-  // const translateY = interpolate(animation.value, [0, 1], [height, 0]);
   const {video} = props;
-  const tY = interpolate(translateY.value, [0, midBound], [0, midBound], {
-    extrapolateLeft: Extrapolate.CLAMP,
-  });
-  const opacity = interpolate(translateY.value, [0, midBound - 100], [1, 0], {
-    extrapolateLeft: Extrapolate.CLAMP,
-  });
-  const statusBarOpacity = interpolate(
-    translateY.value,
-    [0, statusBarHeight || 0],
-    [1, 0],
-    {extrapolateLeft: Extrapolate.CLAMP},
-  );
-  const videoContainerWidth = interpolate(
-    translateY.value,
-    [0, midBound],
-    [width, width - 16],
-    {extrapolateLeft: Extrapolate.CLAMP},
-  );
-  const videoWidth = interpolate(
-    translateY.value,
-    [0, midBound, upperBound],
-    [width, width - 16, PLACEHOLDER_WIDTH],
-    {extrapolateLeft: Extrapolate.CLAMP},
-  );
-  const videoHeight = interpolate(
-    translateY.value,
-    [0, midBound, upperBound],
-    [width / 1.78, minHeight * 1.3, minHeight],
-    {extrapolateLeft: Extrapolate.CLAMP},
-  );
-  const containerHeight = interpolate(
-    translateY.value,
-    [0, midBound],
-    [height, 0],
-    {extrapolateLeft: Extrapolate.CLAMP},
-  );
-  const playerControlOpaciy = interpolate(
-    translateY.value,
-    [midBound, upperBound],
-    [0, 1],
-    {extrapolateLeft: Extrapolate.CLAMP},
-  );
+
   return (
     <>
       <Animated.View
-        style={{
-          height: StatusBar.currentHeight,
-          opacity: statusBarOpacity,
-          backgroundColor: 'black',
-        }}
+        style={[
+          // statusBarOpacityStyle,
+          {
+            height: StatusBar.currentHeight,
+            backgroundColor: 'black',
+          },
+        ]}
       />
       <PanGestureHandler
-        onHandlerStateChange={onGestureEvent}
+        onGestureEvent={gestureHandler}
         activeOffsetY={[-10, 10]}>
-        <Animated.View
-          style={{
-            transform: [{translateY: tY}],
-            ...shadow,
-          }}>
+        <Animated.View style={[uas, shadow]}>
           <Animated.View
-            style={{backgroundColor: 'white', width: videoContainerWidth}}>
+            style={[videoWidthAnimatedStyle, {backgroundColor: 'white'}]}>
             <Animated.View
               style={{
                 ...StyleSheet.absoluteFillObject,
-                opacity: playerControlOpaciy,
+                // ...playerControlOpaciyStyle,
               }}>
               <PlayerControls title={video.title} onPress={slideUp} />
             </Animated.View>
             <AnimatedVideo
               // source={video.video}
-              style={{
-                width: videoWidth,
-                height: videoHeight,
-                backgroundColor: 'red',
-              }}
+              style={[
+                videoWidthAnimatedStyle,
+                videoHeightStyle,
+                {
+                  backgroundColor: 'red',
+                },
+              ]}
               // resizeMode={Video.RESIZE_MODE_COVER}
               // shouldPlay
             />
           </Animated.View>
           <Animated.View
-            style={{
-              backgroundColor: 'white',
-              width: videoContainerWidth,
-              height: containerHeight,
-            }}>
-            <Animated.View style={{opacity}}>
+            style={[
+              videoWidthAnimatedStyle,
+              containerHeightStyle,
+              {
+                backgroundColor: 'white',
+              },
+            ]}>
+            <Animated.View
+              style={
+                [
+                  // opacityStyle
+                ]
+              }>
               <VideoContent {...{video}} />
             </Animated.View>
           </Animated.View>
