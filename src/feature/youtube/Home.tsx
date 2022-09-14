@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import {ScrollView, StatusBar, StyleSheet} from 'react-native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 import VideoThumbnail from './components/VideoThumbnail';
 import videos from './videos';
@@ -11,11 +12,13 @@ type HomeProps = {};
 export default class Home extends React.PureComponent<HomeProps> {
   render() {
     return (
-      <ScrollView style={styles.container}>
-        {videos.map(video => (
-          <VideoThumbnail key={video.id} {...{video}} />
-        ))}
-      </ScrollView>
+      <GestureHandlerRootView>
+        <ScrollView style={styles.container}>
+          {videos.map(video => (
+            <VideoThumbnail key={video.id} {...{video}} />
+          ))}
+        </ScrollView>
+      </GestureHandlerRootView>
     );
   }
 }

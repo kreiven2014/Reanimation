@@ -739,7 +739,7 @@ PODS:
     - React-Codegen
     - React-RCTFabric
     - ReactCommon/turbomodule/core
-  - RNReanimated (3.0.0-rc.2):
+  - RNReanimated (2.10.0):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -748,7 +748,6 @@ PODS:
     - RCTRequired
     - RCTTypeSafety
     - React-callinvoker
-    - React-Codegen
     - React-Core
     - React-Core/DevSupport
     - React-Core/RCTWebSocket
@@ -760,7 +759,6 @@ PODS:
     - React-RCTActionSheet
     - React-RCTAnimation
     - React-RCTBlob
-    - React-RCTFabric
     - React-RCTImage
     - React-RCTLinking
     - React-RCTNetwork
@@ -1050,7 +1048,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 0c357f3156fcb16c8589ede67cc036330b6698ca
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNGestureHandler: 182b4e135cc4fec4988687e2f123e302dc6b4b71
-  RNReanimated: 42c9351d8b8656441ee62a9c81e7fdba176f696b
+  RNReanimated: 7faa787e8d4493fbc95fab2ad331fa7625828cfa
   RNScreens: e2cd04caa74748a6e42609a7b84f76c71d70a6ee
   RNSharedElement: eb7d506733952d58634f34c82ec17e82f557e377
   RNSVG: 81cdb77109d5f3e77dcf1dd8045aaaa8144afddf

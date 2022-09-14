@@ -19,6 +19,7 @@ import Animated, {
   neq,
   useAnimatedGestureHandler,
   useAnimatedStyle,
+  interpolateNode,
 } from 'react-native-reanimated';
 import {PanGestureHandler, State} from 'react-native-gesture-handler';
 
@@ -123,16 +124,31 @@ const VideoModal = (props: VideoModalProps) => {
     };
   });
 
-  const videoWidthAnimatedStyle = useAnimatedStyle(() => {
-    // const videoWidth = interpolate(
-    //   translationY.value,
-    //   [0, midBound, upperBound],
-    //   [width, width - 16, PLACEHOLDER_WIDTH],
-    //   {extrapolateRight: Extrapolate.CLAMP},
-    // );
+  // const videoWidthAnimatedStyle = useAnimatedStyle(() => {
+  //   // const videoWidth = interpolate(
+  //   //   translationY.value,
+  //   //   [0, midBound, upperBound],
+  //   //   [width, width - 16, PLACEHOLDER_WIDTH],
+  //   //   {extrapolateRight: Extrapolate.CLAMP},
+  //   // );
+  //   // console.log('videoWidth', videoWidth);
+  //   return {
+  //     // width: translationY.value,
+  //     width: width,
+  //   };
+  // });
+  const videoWidth = interpolate(
+    translationY.value,
+    [0, midBound, upperBound],
+    [width, width - 16, PLACEHOLDER_WIDTH],
+    {extrapolateRight: Extrapolate.CLAMP},
+  );
+
+  console.log('videoWidth', videoWidth);
+
+  const rotateStyle = useAnimatedStyle(() => {
     return {
-      // width: translationY.value,
-      width: width,
+      width: videoWidth,
     };
   });
 
@@ -257,8 +273,7 @@ const VideoModal = (props: VideoModalProps) => {
         onGestureEvent={gestureHandler}
         activeOffsetY={[-10, 10]}>
         <Animated.View style={[uas, shadow]}>
-          <Animated.View
-            style={[videoWidthAnimatedStyle, {backgroundColor: 'white'}]}>
+          <Animated.View style={[rotateStyle, {backgroundColor: 'white'}]}>
             <Animated.View
               style={{
                 ...StyleSheet.absoluteFillObject,
@@ -269,7 +284,7 @@ const VideoModal = (props: VideoModalProps) => {
             <AnimatedVideo
               // source={video.video}
               style={[
-                videoWidthAnimatedStyle,
+                rotateStyle,
                 videoHeightStyle,
                 {
                   backgroundColor: 'red',
@@ -281,7 +296,7 @@ const VideoModal = (props: VideoModalProps) => {
           </Animated.View>
           <Animated.View
             style={[
-              videoWidthAnimatedStyle,
+              rotateStyle,
               containerHeightStyle,
               {
                 backgroundColor: 'white',
